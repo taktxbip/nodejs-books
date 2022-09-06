@@ -1,7 +1,21 @@
  .nav-wrapper {
      padding: 0 2rem;
  }
-
+ 
  .price {
-    font-size: 2rem;
+     font-size: 2rem;
+ }
+ 
+ .book img {
+    width: 100%;
+    max-width: 400px;
+ }
+
+ #cart .card-image {
+    width: 40px;
+ }
+
+ #cart .card-image  img {
+    width: 100%;
+    height: auto;
  }

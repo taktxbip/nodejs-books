@@ -1,0 +1,40 @@
+<h1>Cart</h1>
+<div id="cart">
+
+    {{#if books.length }}
+
+    <table>
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each books}}
+            <tr>
+                <td>
+                    <div class="card-image">
+                        <img src="{{ img }}">
+                    </div>
+                </td>
+                <td><a target="_blank" class="more-link" href="/books/{{id}}">{{ title }}</a></td>
+                <td>{{ qty }}</td>
+                <td>{{ price }}</td>
+                <td>
+                    <button class="btn btn-small js-remove" data-id="{{id}}">Remove</button>
+                </td>
+            </tr>
+            {{/each }}
+        </tbody>
+    </table>
+    <p class="price">{{ total }}</p>
+
+    {{else}}
+    <h5>Cart is empty</h5>
+    {{/if}}
+
+</div>
