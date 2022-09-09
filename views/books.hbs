@@ -12,9 +12,9 @@
             <div class="card-content">
                 <span class="card-title">{{ title }}</span>
                 <p class="price">{{ price }}</p>
-                <a target="_blank" class="more-link" href="/books/{{id}}">Read more...</a>
+                <a target="_blank" class="more-link" href="/books/{{_id}}">Read more...</a>
                 <form action="/cart/add" method="POST">
-                    <input type="hidden" name="id" value="{{id}}">
+                    <input type="hidden" name="id" value="{{_id}}">
                     <button class="btn" type="submit">Add to cart</button>
                 </form>
             </div>

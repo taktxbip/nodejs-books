@@ -1,6 +1,6 @@
 <div class="book">
-    <h1>{{ title }}</h1>
-    <img src="{{ img }}" alt="{{ title }}">
-    <p class="price">{{ price }}</p>
-    <a href="{{id}}/edit/?allow=true">Edit</a>
+  <h1>{{ book.title }}</h1>
+  <img src="{{ book.img }}" alt="{{ book.title }}">
+  <p class="price">{{ book.price }}</p>
+  <a href="{{book._id}}/edit/?allow=true">Edit</a>
 </div>
