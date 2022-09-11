@@ -40,8 +40,6 @@ userSchema.methods.addToCart = function (course) {
     items[index].qty++;
   }
 
-  console.log(items);
-
   this.cart = { items };
 
   return this.save();
@@ -63,6 +61,13 @@ userSchema.methods.removeFromCart = function (id) {
   }
 
   this.cart = { items };
+
+  return this.save();
+}
+
+
+userSchema.methods.clearCart = function () {
+  this.cart.items = [];
 
   return this.save();
 }

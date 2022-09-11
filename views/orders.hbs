@@ -1,0 +1,31 @@
+<h1>My orders</h1>
+
+{{#if orders.length }}
+
+{{#each orders}}
+<div class="row col s6">
+  <div class="card">
+    <div class="card-content">
+      <div class="card-title">Order <small>#{{_id}}</small></div>
+      <p>Date: <span class="date">{{date}}</span></p>
+
+      <p><em>{{ user.name }}</em> ({{ user.userId.email }})</p>
+
+      <ol>
+        {{#each books}}
+        <li>{{ book.title }} x {{ qty }}</li>
+        {{/each }}
+      </ol>
+
+      <hr>
+
+      <p>Total: <span class="price">{{ total }}</span></p>
+    </div>
+  </div>
+</div>
+
+{{/each }}
+
+{{else}}
+<h5>No orders found</h5>
+{{/if}}

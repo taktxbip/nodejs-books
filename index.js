@@ -6,6 +6,7 @@ const homeRoutes = require('./routes/home');
 const booksRoutes = require('./routes/books');
 const cartRoutes = require('./routes/cart');
 const addRoutes = require('./routes/add-book');
+const ordersRoutes = require('./routes/orders');
 const User = require('./models/User');
 
 const app = express()
@@ -38,6 +39,7 @@ app.use('/', homeRoutes);
 app.use('/books', booksRoutes);
 app.use('/add-book', addRoutes);
 app.use('/cart', cartRoutes);
+app.use('/orders', ordersRoutes);
 
 const { PORT = 3000 } = process.env;
 

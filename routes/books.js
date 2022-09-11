@@ -24,7 +24,7 @@ router.get('/:id', async (req, res) => {
   const book = await Book.findById(req.params.id).lean();
 
   res.render('book', {
-    layout: 'empty',
+    // layout: 'empty',
     isBooks: true,
     book
   });
