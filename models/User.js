@@ -27,4 +27,45 @@ const userSchema = new Schema({
   }
 });
 
+userSchema.methods.addToCart = function (course) {
+  const items = [...this.cart.items];
+  const index = items.findIndex(el => el.bookId.toString() === course._id.toString());
+
+  if (index === -1) {
+    items.push({
+      qty: 1,
+      bookId: course._id
+    })
+  } else {
+    items[index].qty++;
+  }
+
+  console.log(items);
+
+  this.cart = { items };
+
+  return this.save();
+}
+
+userSchema.methods.removeFromCart = function (id) {
+  let items = [...this.cart.items];
+  const index = items.findIndex(el => el.bookId.toString() === id.toString());
+
+  if (index === -1) {
+    return null;
+  }
+
+  if (items[index].qty > 1) {
+    items[index].qty--;
+  } else {
+    delete items[index];
+    items = items.filter(el => el.bookId.toString() !== id.toString());
+  }
+
+  this.cart = { items };
+
+  return this.save();
+}
+
+
 module.exports = model('User', userSchema);

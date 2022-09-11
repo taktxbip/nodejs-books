@@ -5,7 +5,12 @@ const router = Router();
 
 router.get('/', async (req, res) => {
 
-  const books = await Book.find().lean();
+  const books = await Book.find()
+    .populate('userId', 'email name')
+    .select('title price img')
+    .lean();
+
+  // console.log(books);
 
   res.render('books', {
     title: 'Books',
@@ -15,9 +20,6 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/:id', async (req, res) => {
-
-  console.log('id');
-  console.log(req.params.id);
 
   const book = await Book.findById(req.params.id).lean();
 
