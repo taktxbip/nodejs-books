@@ -14,8 +14,8 @@ router.get('/', async (req, res) => {
 
 
 router.post('/add', async (req, res) => {
-    const book = await Book.getBook(req.body.id);
-    await Cart.add(book);
+    // const book = await Book.getBook(req.body.id);
+    // await Cart.add(book);
     res.redirect('/cart');
 })
 

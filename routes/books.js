@@ -15,6 +15,10 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/:id', async (req, res) => {
+
+  console.log('id');
+  console.log(req.params.id);
+
   const book = await Book.findById(req.params.id).lean();
 
   res.render('book', {
@@ -41,6 +45,15 @@ router.get('/:id/edit', async (req, res) => {
 router.post('/:id/edit', async (req, res) => {
   await Book.findByIdAndUpdate(req.params.id, req.body);
   res.redirect(`/books/${req.params.id}`);
+})
+
+router.post('/remove', async (req, res) => {
+  try {
+    await Book.deleteOne({ _id: req.body.id });
+    res.redirect(`/books`);
+  } catch (e) {
+    console.log(e);
+  }
 })
 
 

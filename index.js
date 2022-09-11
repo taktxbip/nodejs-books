@@ -32,7 +32,9 @@ async function start() {
   // ?retryWrites=true&w=majority
   try {
     const url = 'mongodb+srv://books-user:OalbEyCegqqYdwTP@test.xyenu4w.mongodb.net/library';
-    await mongoose.connect(url, { useNewUrlParser: true });
+    await mongoose.connect(url, {
+      useNewUrlParser: true
+    });
 
     app.listen(PORT, () => {
       console.log(`Running on port ${PORT}`);
