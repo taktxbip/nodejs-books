@@ -1,8 +1,9 @@
 const { Router } = require('express');
 const Order = require('../models/Order');
+const authMiddleware = require('../middleware/auth');
 const router = Router();
 
-router.post('/', async (req, res) => {
+router.post('/', authMiddleware, async (req, res) => {
 
   try {
     const user = await req.user
@@ -33,7 +34,7 @@ router.post('/', async (req, res) => {
 
 })
 
-router.get('/', async (req, res) => {
+router.get('/', authMiddleware, async (req, res) => {
   try {
 
     const orders = await Order.find({
@@ -49,7 +50,6 @@ router.get('/', async (req, res) => {
           ...o,
           total: o.books.reduce((total, el) => total + el.qty * el.book.price, 0)
         }
-        console.log(output);
         return output;
       })
     });

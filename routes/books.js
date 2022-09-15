@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const Book = require('../models/Book');
-
+const authMiddleware = require('../middleware/auth');
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -9,8 +9,6 @@ router.get('/', async (req, res) => {
     .populate('userId', 'email name')
     .select('title price img')
     .lean();
-
-  // console.log(books);
 
   res.render('books', {
     title: 'Books',
@@ -30,7 +28,7 @@ router.get('/:id', async (req, res) => {
   });
 })
 
-router.get('/:id/edit', async (req, res) => {
+router.get('/:id/edit', authMiddleware, async (req, res) => {
 
   if (!req.query.allow) {
     return res.redirect('/');
@@ -44,12 +42,12 @@ router.get('/:id/edit', async (req, res) => {
   });
 })
 
-router.post('/:id/edit', async (req, res) => {
+router.post('/:id/edit', authMiddleware, async (req, res) => {
   await Book.findByIdAndUpdate(req.params.id, req.body);
   res.redirect(`/books/${req.params.id}`);
 })
 
-router.post('/remove', async (req, res) => {
+router.post('/remove', authMiddleware, async (req, res) => {
   try {
     await Book.deleteOne({ _id: req.body.id });
     res.redirect(`/books`);

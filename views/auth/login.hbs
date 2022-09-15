@@ -1,0 +1,55 @@
+<div class="row auth">
+  <div class="col s12">
+    <ul class="tabs">
+      <li class="tab col s3"><a class="active" href="#login">Login</a></li>
+      <li class="tab col s3"><a href="#register">Register</a></li>
+    </ul>
+  </div>
+  <div id="login" class="col s12">
+    <h1>Login</h1>
+    <form class="col s12" method="POST" action="/auth/login">
+      <div class="row">
+        <div class="input-field col s6">
+          <input id="email" type="email" class="validate" name="email" required>
+          <label for="email">Email</label>
+          <span class="helper-text" data-error="Set email"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <input id="password" type="text" class="validate" name="password" required>
+          <label for="password">Password</label>
+          <span class="helper-text" data-error="Set password"></span>
+        </div>
+      </div>
+      <button class="btn" type="submit">Login</button>
+    </form>
+  </div>
+  <div id="register" class="col s12">
+    <h1>Create account</h1>
+    <form class="col s12" method="POST" action="/auth/register">
+      <div class="row">
+        <div class="input-field col s6">
+          <input id="remail" type="email" class="validate" name="email" required>
+          <label for="remail">Email</label>
+          <span class="helper-text" data-error="Set email"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <input id="rpassword" type="text" class="validate" name="password" required>
+          <label for="rpassword">Password</label>
+          <span class="helper-text" data-error="Set password"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <input id="confirm" type="text" class="validate" name="password" required>
+          <label for="confirm">Confirm password</label>
+          <span class="helper-text" data-error="Set password"></span>
+        </div>
+      </div>
+      <button class="btn" type="submit">Register</button>
+    </form>
+  </div>
+</div>

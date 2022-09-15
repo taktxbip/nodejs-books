@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const Book = require('../models/Book');
+const authMiddleware = require('../middleware/auth');
 const router = Router();
 
 const calculateTotal = (cart) => {
@@ -18,7 +19,7 @@ const transformCart = (cart) => {
   });
 }
 
-router.get('/', async (req, res) => {
+router.get('/', authMiddleware, async (req, res) => {
 
   const user = await req.user
     .populate('cart.items.bookId');
@@ -34,19 +35,18 @@ router.get('/', async (req, res) => {
 })
 
 
-router.post('/add', async (req, res) => {
+router.post('/add', authMiddleware, async (req, res) => {
   const book = await Book.findById(req.body.id).lean();
   await req.user.addToCart(book);
   res.redirect('/cart');
 })
 
-
-router.delete('/remove/:id', async (req, res) => {
+router.delete('/remove/:id', authMiddleware, async (req, res) => {
   await req.user.removeFromCart(req.params.id);
 
   const user = await req.user.populate('cart.items.bookId');
   const books = transformCart(user.cart);
-  
+
   res.status(200).json({
     books,
     total: calculateTotal(user.cart)

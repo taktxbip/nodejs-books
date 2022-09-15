@@ -27,8 +27,6 @@ document.querySelectorAll('.date').forEach(node => {
 })
 
 
-
-
 const $cart = document.getElementById('cart');
 if ($cart) {
   $cart.addEventListener('click', e => {
@@ -64,3 +62,5 @@ if ($cart) {
       });
   });
 }
+
+M.Tabs.init(document.querySelectorAll('.tabs'));

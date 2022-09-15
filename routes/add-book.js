@@ -1,16 +1,17 @@
 const { Router } = require('express');
 const Book = require('../models/Book');
+const authMiddleware = require('../middleware/auth');
 
 const router = Router();
 
-router.get('/', (req, res) => {
+router.get('/', authMiddleware, (req, res) => {
   res.render('add-book', {
     title: 'Add Book',
     isAddBook: true
   });
 })
 
-router.post('/', async (req, res) => {
+router.post('/', authMiddleware, async (req, res) => {
   const { title, price, img } = req.body;
 
   const book = new Book({

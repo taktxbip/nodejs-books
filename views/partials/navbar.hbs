@@ -9,6 +9,7 @@
       <li><a href="/books">Books</a></li>
       {{/if}}
 
+      {{#if isAuth}}
       {{#if isAddBook}}
       <li class="active"><a href="/add-book">Add Books</a></li>
       {{else}}
@@ -26,6 +27,17 @@
       {{else}}
       <li><a href="/orders">Orders</a></li>
       {{/if}}
+
+      <li><a href="/auth/logout">Logout</a></li>
+
+      {{else}}
+      {{#if isLogin}}
+      <li class="active"><a href="/auth/login#login">Login</a></li>
+      {{else}}
+      <li><a href="/auth/login#login">Login</a></li>
+      {{/if}}
+      {{/if}}
+
     </ul>
   </div>
 </nav>
