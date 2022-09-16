@@ -19,7 +19,8 @@
     "express-handlebars": "^6.0.6",
     "express-session": "^1.17.3",
     "mongoose": "^6.5.4",
-    "uuid": "^8.3.2"
+    "nodemailer": "^6.7.8",
+    "sib-api-v3-sdk": "^8.4.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
