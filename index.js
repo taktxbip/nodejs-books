@@ -17,7 +17,8 @@ const authRoutes = require('./routes/auth');
 const varMiddleware = require('./middleware/variables');
 const userMiddleware = require('./middleware/user');
 
-const MONGODB_URI = 'mongodb+srv://books-user:OalbEyCegqqYdwTP@test.xyenu4w.mongodb.net/library';
+const keys = require('./keys');
+
 const app = express()
 
 const hbs = exprhbs.create({
@@ -26,7 +27,7 @@ const hbs = exprhbs.create({
 })
 const store = new MongoStore({
   collection: 'sessions',
-  uri: MONGODB_URI
+  uri: keys.MONGODB_URI
 });
 
 app.engine('hbs', hbs.engine)
@@ -37,7 +38,7 @@ app.set('views', 'views')
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
-  secret: 'very secret phrase',
+  secret: keys.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   store
@@ -59,7 +60,7 @@ const { PORT = 3000 } = process.env;
 
 async function start() {
   try {
-    await mongoose.connect(MONGODB_URI, {
+    await mongoose.connect(keys.MONGODB_URI, {
       useNewUrlParser: true
     });
 
