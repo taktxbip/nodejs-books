@@ -21,6 +21,7 @@
       <span class="helper-text" data-error="Set image url"></span>
     </div>
   </div>
+  <input type="hidden" name="_csrf" value="{{csrf}}">
   <button class="btn" type="submit">Save</button>
 </form>
 
@@ -28,5 +29,6 @@
 
 <form method="POST" action="/books/remove">
   <input type="hidden" name="id" value="{{book._id}}">
+  <input type="hidden" name="_csrf" value="{{csrf}}">
   <button class="btn red" type="submit">Remove</button>
 </form>

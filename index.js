@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const exprhbs = require('express-handlebars');
 const session = require('express-session');
 const MongoStore = require('connect-mongodb-session')(session);
+const csrf = require('csurf');
+const flash = require('connect-flash');
 
 const homeRoutes = require('./routes/home');
 const booksRoutes = require('./routes/books');
@@ -40,6 +42,8 @@ app.use(session({
   saveUninitialized: false,
   store
 }));
+app.use(csrf());
+app.use(flash());
 app.use(varMiddleware);
 app.use(userMiddleware);
 
