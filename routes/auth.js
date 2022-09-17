@@ -3,18 +3,19 @@ const { Router } = require('express');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const router = Router();
-
 const User = require('../models/User');
-const regEmail = require('../emails/registration');
-const resetEmail = require('../emails/reset');
+const { body, validationResult } = require('express-validator/check');
 
 // emails stuff
 const Sib = require('sib-api-v3-sdk');
-const { RequestContactExportCustomContactFilter } = require('sib-api-v3-sdk');
 const client = Sib.ApiClient.instance;;
 const apiKey = client.authentications['api-key'];
 apiKey.apiKey = keys.SENDINBLUE_API_KEY;
 const tranEmailApi = new Sib.TransactionalEmailsApi();
+
+// emails templates
+const regEmail = require('../emails/registration');
+const resetEmail = require('../emails/reset');
 
 router.get('/login', async (req, res) => {
   res.render('auth/login', {
@@ -57,9 +58,16 @@ router.get('/logout', async (req, res) => {
   })
 })
 
-router.post('/register', async (req, res) => {
+router.post('/register', body('email').isEmail(), async (req, res) => {
   try {
     const { email, password, confirm, name } = req.body;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      req.flash('error', errors.array()[0].msg);
+      return res.status(422).redirect('/auth/login#register');
+    }
+
     const candidate = await User.findOne({ email });
 
     if (candidate) {
