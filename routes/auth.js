@@ -4,7 +4,8 @@ const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const router = Router();
 const User = require('../models/User');
-const { body, validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator/check');
+const { registerValidators } = require('../utils/validators');
 
 // emails stuff
 const Sib = require('sib-api-v3-sdk');
@@ -58,9 +59,9 @@ router.get('/logout', async (req, res) => {
   })
 })
 
-router.post('/register', body('email').isEmail(), async (req, res) => {
+router.post('/register', registerValidators, async (req, res) => {
   try {
-    const { email, password, confirm, name } = req.body;
+    const { email, password, name } = req.body;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -68,20 +69,13 @@ router.post('/register', body('email').isEmail(), async (req, res) => {
       return res.status(422).redirect('/auth/login#register');
     }
 
-    const candidate = await User.findOne({ email });
+    const hashPassword = await bcrypt.hash(password, 10);
+    const user = new User({ email, password: hashPassword, name, cart: { items: [] } });
+    await user.save();
 
-    if (candidate) {
-      req.flash('error', 'User is already registered');
-      res.redirect('/auth/login#register');
-    } else {
-      const hashPassword = await bcrypt.hash(password, 10);
-      const user = new User({ email, password: hashPassword, name, cart: { items: [] } });
-      await user.save();
+    res.redirect('/auth/login#login');
 
-      res.redirect('/auth/login#login');
-
-      await tranEmailApi.sendTransacEmail(regEmail(email));
-    }
+    await tranEmailApi.sendTransacEmail(regEmail(email));
 
   } catch (e) {
     console.log(e);
