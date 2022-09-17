@@ -13,6 +13,11 @@
         <span class="card-title">{{ title }}</span>
         <p class="price">{{ price }}</p>
         <a target="_blank" class="more-link" href="/books/{{_id}}">Read more...</a>
+
+        {{#ifeq @root.userId userId._id}}
+        <a href="/books/{{_id}}/edit">Edit</a>
+        {{/ifeq }}
+
         {{#if @root.isAuth}}
         <form action="/cart/add" method="POST">
           <input type="hidden" name="id" value="{{_id}}">

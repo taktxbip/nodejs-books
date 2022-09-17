@@ -3,53 +3,93 @@ const Book = require('../models/Book');
 const authMiddleware = require('../middleware/auth');
 const router = Router();
 
+const isOwner = (book, req) => {
+  return book.userId.toString() === req.user._id.toString();
+}
+
 router.get('/', async (req, res) => {
 
-  const books = await Book.find()
-    .populate('userId', 'email name')
-    .select('title price img')
-    .lean();
+  try {
+    const books = await Book.find()
+      .populate('userId', 'email name')
+      .select('title price img')
+      .lean();
 
-  res.render('books', {
-    title: 'Books',
-    isBooks: true,
-    books
-  });
+    res.render('books', {
+      title: 'Books',
+      isBooks: true,
+      userId: req.user ? req.user._id.toString() : undefined,
+      books
+    });
+  } catch (e) {
+    console.log(e);
+  }
+
 })
 
 router.get('/:id', async (req, res) => {
 
-  const book = await Book.findById(req.params.id).lean();
+  try {
+    const book = await Book.findById(req.params.id).lean();
 
-  res.render('book', {
-    // layout: 'empty',
-    isBooks: true,
-    book
-  });
+    res.render('book', {
+      // layout: 'empty',
+      isBooks: true,
+      book
+    });
+  } catch (e) {
+    console.log(e);
+  }
 })
 
 router.get('/:id/edit', authMiddleware, async (req, res) => {
 
-  if (!req.query.allow) {
-    return res.redirect('/');
+  try {
+    const book = await Book.findById(req.params.id).lean();
+
+    if (!isOwner(book, req)) {
+      return res.redirect('/books');
+    }
+
+    res.render('edit', {
+      isBooks: true,
+      book
+    });
+
+  } catch (e) {
+    console.log(e);
   }
 
-  const book = await Book.findById(req.params.id).lean();
-
-  res.render('edit', {
-    isBooks: true,
-    book
-  });
 })
 
 router.post('/:id/edit', authMiddleware, async (req, res) => {
-  await Book.findByIdAndUpdate(req.params.id, req.body);
-  res.redirect(`/books/${req.params.id}`);
+  try {
+
+    const { id } = req.params;
+    const book = await Book.findById(id)
+
+    if (!isOwner(book, req)) {
+      return res.redirect('/books');
+    }
+
+    Object.assign(book, req.body);
+    await book.save();
+
+    res.redirect(`/books/${id}`);
+  } catch (e) {
+    console.log(e);
+  }
 })
 
 router.post('/remove', authMiddleware, async (req, res) => {
   try {
-    await Book.deleteOne({ _id: req.body.id });
+    const { id } = req.body;
+
+    await Book.deleteOne({
+      _id: id,
+      userId: req.user._id
+    });
+
     res.redirect(`/books`);
   } catch (e) {
     console.log(e);

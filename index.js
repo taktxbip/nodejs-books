@@ -23,7 +23,8 @@ const app = express()
 
 const hbs = exprhbs.create({
   defaultLayout: 'main',
-  extname: 'hbs'
+  extname: 'hbs',
+  helpers: require('./utils/hbs-utils')
 })
 const store = new MongoStore({
   collection: 'sessions',

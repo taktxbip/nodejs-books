@@ -10,6 +10,7 @@ const resetEmail = require('../emails/reset');
 
 // emails stuff
 const Sib = require('sib-api-v3-sdk');
+const { RequestContactExportCustomContactFilter } = require('sib-api-v3-sdk');
 const client = Sib.ApiClient.instance;;
 const apiKey = client.authentications['api-key'];
 apiKey.apiKey = keys.SENDINBLUE_API_KEY;
@@ -95,11 +96,8 @@ router.post('/reset', (req, res) => {
         return res.redirect('/auth/reset');
       }
 
-      // console.log('candidate');
-
       const token = buffer.toString('hex');
       const candidate = await User.findOne({ email });
-      // console.log(candidate);
       if (candidate) {
         candidate.resetToken = token;
         candidate.resetTokenExp = Date.now() + 60 * 60 * 1000;
@@ -111,6 +109,66 @@ router.post('/reset', (req, res) => {
         return res.redirect('/auth/reset');
       }
     })
+  } catch (e) {
+    console.log(e);
+  }
+})
+
+router.get('/password/:token', async (req, res) => {
+  if (!req.params.token) {
+    return res.redirect('/auth/login');
+  }
+
+  try {
+    const candidate = await User.findOne({
+      resetToken: req.params.token,
+      resetTokenExp: { $gt: Date.now() }
+    });
+
+    if (!candidate) {
+      return res.redirect('/auth/login');
+    }
+
+    res.render('auth/password', {
+      isLogin: true,
+      error: req.flash('error'),
+      userId: candidate._id.toString(),
+      token: req.params.token
+    });
+
+  } catch (e) {
+    console.log(e);
+  }
+})
+
+router.post('/password/', async (req, res) => {
+  try {
+    const { userId, token, password, confirm } = req.body;
+
+    if (password !== confirm) {
+      req.flash('error', 'Passwords missmatch');
+      return res.redirect(`/auth/password/${token}`);
+    }
+
+    const user = await User.findOne({
+      _id: userId,
+      resetToken: token,
+      resetTokenExp: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      req.flash('error', 'No user with this token or token expired');
+      return res.redirect('/auth/login');
+    } else {
+      user.password = await bcrypt.hash(password, 10);
+      user.resetToken = undefined;
+      user.resetTokenExp = undefined;
+      await user.save();
+
+      req.flash('error', 'Password updated')
+      return res.redirect(`/auth/login`);
+    }
+
   } catch (e) {
     console.log(e);
   }
