@@ -2,6 +2,8 @@ const { Router } = require('express');
 const Book = require('../models/Book');
 const authMiddleware = require('../middleware/auth');
 const router = Router();
+const { validationResult } = require('express-validator/check');
+const { bookValidators } = require('../utils/validators');
 
 const isOwner = (book, req) => {
   return book.userId.toString() === req.user._id.toString();
@@ -62,11 +64,22 @@ router.get('/:id/edit', authMiddleware, async (req, res) => {
 
 })
 
-router.post('/:id/edit', authMiddleware, async (req, res) => {
+router.post('/:id/edit', authMiddleware, bookValidators, async (req, res) => {
+
   try {
 
     const { id } = req.params;
-    const book = await Book.findById(id)
+    const book = await Book.findById(id).lean();
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.render('edit', {
+        isBooks: true,
+        error: errors.array()[0].msg,
+        book
+      });
+    }
 
     if (!isOwner(book, req)) {
       return res.redirect('/books');

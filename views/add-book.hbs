@@ -1,22 +1,25 @@
+{{#if error}}
+<p class="alert">{{error}}</p>
+{{/if }}
 <h1>Add book</h1>
-<form class="col s12" method="POST" action="/add-book">
+<form class="col s12" method="POST" action="/add-book" novalidate>
   <div class="row">
     <div class="input-field col s6">
-      <input id="title" type="text" class="validate" name="title" required>
+      <input id="title" type="text" class="validate" name="title" value="{{formData.title}}" required>
       <label for="title">Book Title</label>
       <span class="helper-text" data-error="Set title"></span>
     </div>
   </div>
   <div class="row">
     <div class="input-field col s6">
-      <input id="price" type="text" class="validate" name="price" required>
+      <input id="price" type="text" class="validate" name="price" value="{{formData.price}}" required>
       <label for="price">Price</label>
       <span class="helper-text" data-error="Set price"></span>
     </div>
   </div>
   <div class="row">
     <div class="input-field col s6">
-      <input id="img" type="text" class="validate" name="img" required>
+      <input id="img" type="text" class="validate" name="img" value="{{formData.img}}" required>
       <label for="img">Cover url</label>
       <span class="helper-text" data-error="Set image url"></span>
     </div>

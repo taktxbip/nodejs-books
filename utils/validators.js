@@ -32,3 +32,10 @@ exports.registerValidators = [
   })
     .trim()
 ]
+
+
+exports.bookValidators = [
+  body('title').isLength({ min: 3 }).withMessage('Minimal length must be 3 at least').trim(),
+  body('price').isNumeric().withMessage('Must be correct price'),
+  body('img', 'Set correct url for image').isURL()
+]
