@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const Book = require('../models/Book');
 const authMiddleware = require('../middleware/auth');
-const { validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator');
 const { bookValidators } = require('../utils/validators');
 const router = Router();
 

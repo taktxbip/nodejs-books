@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const router = Router();
 const User = require('../models/User');
-const { validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator');
 const { registerValidators } = require('../utils/validators');
 
 // emails stuff
